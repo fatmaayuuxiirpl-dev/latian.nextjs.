@@ -1,24 +1,29 @@
 import Link from "next/link";
 import { events } from "@/data/events";
+import KartuEvent from "../components/KartuEvent";
 
-export default function Home() {
+export default function Beranda() {
+  const terdekat = events.slice(0, 3);
   return (
-    <main className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Daftar Event</h1>
-      <div className="grid gap-4 md:grid-cols-2">
-        {events.map((event) => (
-          <div key={event.id} className="border p-4 rounded-lg shadow-sm bg-white text-black">
-            <h2 className="text-xl font-bold">{event.judul}</h2>
-            <p className="text-slate-600 mb-4">{event.tanggal} · {event.lokasi}</p>
-            <Link
-              href={`/event/${event.id}`}
-              className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Lihat Detail
-            </Link>
-          </div>
+    <div>
+      <section className="py-12 text-center">
+        <h1 className="text-4xl font-bold">Temukan event seru di sekolahmu</h1>
+        <p className="mt-3 text-slate-600">
+          Workshop, lomba, musik, dan bazar. Pesan tiketnya di sini.
+        </p>
+        <Link
+          href="/event"
+          className="mt-6 inline-block rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700"
+        >
+          Lihat semua event
+        </Link>
+      </section>
+      <h2 className="mb-3 text-xl font-semibold">Event terdekat</h2>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {terdekat.map((e) => (
+          <KartuEvent key={e.id} event={e} />
         ))}
       </div>
-    </main>
+    </div>
   );
 }
