@@ -1,24 +1,32 @@
 import Link from "next/link";
+import { rupiah, type Event } from "@/data/events";
 
-interface EventProps {
-  event: {
-    id: number;
-    judul: string;
-    deskripsi?: string;
-    [key: string]: any;
-  };
-}
-
-export default function KartuEvent({ event }: EventProps) {
+export default function KartuEvent({ event }: { event: Event }) {
+  const sisa = event.kuota - event.terisi;
+  const laris = sisa > 0 && event.terisi / event.kuota >= 0.5;
   return (
-    <div className="border rounded-lg p-4 shadow-sm bg-white">
-      <h3 className="font-bold text-lg mb-2">{event.judul}</h3>
-      <p className="text-slate-600 text-sm mb-4">{event.deskripsi}</p>
+    <div className="rounded-xl border bg-white p-4 shadow-sm">
+      <span className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700">
+        {event.kategori}
+      </span>
+      {laris && (
+        <span className="ml-2 rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+          Laris
+        </span>
+      )}
+      <h3 className="mt-2 text-lg font-semibold">{event.judul}</h3>
+      <p className="text-sm text-slate-500">
+        {event.tanggal} · {event.lokasi}
+      </p>
+      <p className="mt-2 font-medium">{rupiah(event.harga)}</p>
+      <p className={sisa === 0 ? "text-sm text-red-600" : "text-sm text-green-700"}>
+        {sisa === 0 ? "Tiket habis" : `Sisa ${sisa} tiket`}
+      </p>
       <Link
         href={`/event/${event.id}`}
-        className="text-blue-600 hover:underline font-medium text-sm"
+        className="mt-3 inline-block rounded bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
       >
-        Detail Event &rarr;
+        Lihat detail
       </Link>
     </div>
   );
